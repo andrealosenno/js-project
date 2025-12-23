@@ -3,38 +3,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let count = 0;
 
+    const createButton = (text, delta) => {
+        const btn = document.createElement('button');
+        btn.textContent = text;
+        btn.className = 'btn';
+        btn.dataset.delta = delta;
+        return btn;
+    };
+
     const container = document.createElement('div');
     container.className = 'counter-container';
 
-    const btnDecrement = document.createElement('button');
-    btnDecrement.innerText = '−';
-    btnDecrement.className = 'btn';
-    
     const displayValue = document.createElement('span');
-    displayValue.innerText = count;
+    displayValue.textContent = count;
     displayValue.className = 'counter-value';
 
-    const btnIncrement = document.createElement('button');
-    btnIncrement.innerText = '+';
-    btnIncrement.className = 'btn';
+    container.append(createButton('−', -1), displayValue, createButton('+', 1));
 
-    const updateDisplay = () => {
-        displayValue.innerText = count;
-    };
-
-    btnDecrement.addEventListener('click', () => {
-        count--;
-        updateDisplay();
+    container.addEventListener('click', ({ target }) => {
+        const delta = target.dataset.delta;
+        if (delta) displayValue.textContent = (count += +delta);
     });
-
-    btnIncrement.addEventListener('click', () => {
-        count++;
-        updateDisplay();
-    });
-
-    container.appendChild(btnDecrement);
-    container.appendChild(displayValue);
-    container.appendChild(btnIncrement);
 
     appRoot.appendChild(container);
 });
