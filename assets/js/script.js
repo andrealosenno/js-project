@@ -1,29 +1,34 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const appRoot = document.getElementById('app');
+const app = document.getElementById('app');
 
-    let count = 0;
+const buttonsConfig = [
+    { text: '-1', value: -1 },
+    { text: '+1', value: 1 },
+    { text: '-5', value: -5 },
+    { text: '+5', value: 5 },
+    { text: '-10', value: -10 },
+    { text: '+10', value: 10 },
+];
 
-    const createButton = (text, delta) => {
-        const btn = document.createElement('button');
-        btn.textContent = text;
-        btn.className = 'btn';
-        btn.dataset.delta = delta;
-        return btn;
-    };
+let count = 0;
 
-    const container = document.createElement('div');
-    container.className = 'counter-container';
+function createElement(tag, props = {}, text = '') {
+    const element = document.createElement(tag);
+    Object.assign(element, props);
+    element.textContent = text;
+    return element;
+}
 
-    const displayValue = document.createElement('span');
-    displayValue.textContent = count;
-    displayValue.className = 'counter-value';
+const display = createElement('h1', { id: 'counter' }, count);
+const buttonContainer = createElement('div', { className: 'buttons-wrapper' });
 
-    container.append(createButton('−', -1), displayValue, createButton('+', 1));
+const updateDisplay = (value) => {
+    count += value;
+    display.textContent = count;
+};
 
-    container.addEventListener('click', ({ target }) => {
-        const delta = target.dataset.delta;
-        if (delta) displayValue.textContent = (count += +delta);
-    });
-
-    appRoot.appendChild(container);
+buttonsConfig.forEach(config => {
+    const btn = createElement('button', { onclick: () => updateDisplay(config.value) }, config.text);
+    buttonContainer.appendChild(btn);
 });
+
+app.append(display, buttonContainer);
